@@ -5,10 +5,15 @@ dotenv.config();
 interface IEnvConfig {
   PORT: string;
   DB_URL: string;
+  BCRYPT_SALT_ROUND: string;
 }
 
 const loadEnvVariable = (): IEnvConfig => {
-  const requiredEnvVariables: string[] = ["PORT", "DB_URL"];
+  const requiredEnvVariables: string[] = [
+    "PORT",
+    "DB_URL",
+    "BCRYPT_SALT_ROUND",
+  ];
 
   const missing = requiredEnvVariables.filter((key) => !process.env[key]);
   if (missing.length > 0) {
@@ -21,6 +26,7 @@ const loadEnvVariable = (): IEnvConfig => {
   return {
     PORT: process.env.PORT as string,
     DB_URL: process.env.DB_URL as string,
+    BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND as string,
   };
 };
 
