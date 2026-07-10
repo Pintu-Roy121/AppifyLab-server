@@ -15,7 +15,7 @@ const startServer = async () => {
     console.log("Connect to DB Successful");
 
     server = app.listen(envVars.PORT, () => {
-      console.log(`Server is Listing onf port ${envVars.PORT}`);
+      console.log(`Server is Listing on port ${envVars.PORT}`);
     });
   } catch (error) {
     console.log(error);
