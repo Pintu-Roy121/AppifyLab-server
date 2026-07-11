@@ -4,6 +4,6 @@ export interface IReply {
   user: Types.ObjectId;
   comment: Types.ObjectId;
   text: string;
-  likeCount: number;
+  likeCount?: number;
   createdAt?: Date;
 }
