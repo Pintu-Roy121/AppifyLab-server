@@ -20,6 +20,7 @@ export const globalErrorHandlers = (
 
   res.status(statusCode).json({
     success: false,
+    status: statusCode,
     message,
     err,
   });
