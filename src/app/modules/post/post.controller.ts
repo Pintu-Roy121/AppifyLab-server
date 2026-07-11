@@ -8,8 +8,12 @@ import { PostServices } from "./post.service";
 const createPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const decodedToken = req.user;
+    const payload = {
+      image: req.file?.path,
+      ...req.body,
+    };
     const post = await PostServices.createPost(
-      req.body,
+      payload,
       decodedToken as JwtPayload,
     );
 
