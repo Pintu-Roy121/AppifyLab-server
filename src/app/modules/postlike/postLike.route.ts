@@ -13,4 +13,6 @@ router.post(
   PostLikeController.createPostLike,
 );
 
+router.get("/:id", checkAuth(), PostLikeController.getAllLikeByPostId);
+
 export const PostLikeRoutes = router;

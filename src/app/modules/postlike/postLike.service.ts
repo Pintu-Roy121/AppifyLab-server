@@ -17,16 +17,27 @@ const createPostLike = async (
       { $inc: { likeCount: -1 } },
       { new: true },
     );
-    return { liked: false, likeCount: Math.max(post?.likeCount ?? 0, 0) };
+    return {
+      liked: false,
+      postLike: { _id: isExist._id, delete: true },
+      likeCount: Math.max(post?.likeCount ?? 0, 0),
+    };
   }
 
-  await PostLike.create(filter);
+  const postLike = await PostLike.create(filter);
   const post = await Post.findByIdAndUpdate(
     payload.post,
     { $inc: { likeCount: 1 } },
     { new: true },
   );
-  return { liked: true, likeCount: post?.likeCount ?? 0 };
+  return { liked: true, postLike, likeCount: post?.likeCount ?? 0 };
 };
 
-export const PostLikeServices = { createPostLike };
+const getAllLikeByPostId = async (payload: string) => {
+  const result = await PostLike.find({ post: payload })
+    .sort({ createdAt: -1 })
+    .populate("user", "email");
+  return result;
+};
+
+export const PostLikeServices = { createPostLike, getAllLikeByPostId };

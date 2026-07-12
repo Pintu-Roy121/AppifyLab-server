@@ -19,5 +19,17 @@ const createPostLike = catchAsync(
     });
   },
 );
+const getAllLikeByPostId = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const postLike = await PostLikeServices.getAllLikeByPostId(id as string);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successful",
+      data: postLike,
+    });
+  },
+);
 
-export const PostLikeController = { createPostLike };
+export const PostLikeController = { createPostLike, getAllLikeByPostId };

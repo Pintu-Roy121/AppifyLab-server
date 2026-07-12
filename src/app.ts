@@ -8,7 +8,12 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://appifylab-task-frontend-bice.vercel.app",
+    credentials: true,
+  }),
+);
 
 app.use("/api/v1", router);
 

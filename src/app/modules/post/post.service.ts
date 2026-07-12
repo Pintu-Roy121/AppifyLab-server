@@ -1,5 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
-import { IPost } from "./post.interface";
+import { IPost, PostVisibility } from "./post.interface";
 import { Post } from "./post.model";
 
 const createPost = async (
@@ -18,7 +18,9 @@ const createPost = async (
 };
 
 const getAllPost = async () => {
-  const posts = await Post.find({}).sort({ createdAt: -1 });
+  const posts = await Post.find({ visibility: PostVisibility.PUBLIC })
+    .sort({ createdAt: -1 })
+    .populate("author", "firstName lastName email");
   const total = await Post.countDocuments();
   return {
     meta: {
