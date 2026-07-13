@@ -34,4 +34,14 @@ const createReplyLike = async (
   return { liked: true, likeCount: updated?.likeCount ?? 0 };
 };
 
-export const ReplyLikeServices = { createReplyLike };
+const getAllReplyLikeByReplyId = async (payload: string) => {
+  const result = await ReplyLike.find({ reply: payload })
+    .sort({ createdAt: -1 })
+    .populate("user", "email");
+  return result;
+};
+
+export const ReplyLikeServices = {
+  createReplyLike,
+  getAllReplyLikeByReplyId,
+};

@@ -36,4 +36,11 @@ const createComment = async (
     session.endSession();
   }
 };
-export const CommentServices = { createComment };
+
+const getAllCommentByPostId = async (payload: string) => {
+  const result = await Comment.find({ post: payload })
+    .sort({ createdAt: -1 })
+    .populate("user", "firstName lastName createdAt email");
+  return result;
+};
+export const CommentServices = { createComment, getAllCommentByPostId };

@@ -21,4 +21,17 @@ const createComment = catchAsync(
   },
 );
 
-export const CommentController = { createComment };
+const getAllCommentByPostId = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const postLike = await CommentServices.getAllCommentByPostId(id as string);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successful",
+      data: postLike,
+    });
+  },
+);
+
+export const CommentController = { createComment, getAllCommentByPostId };

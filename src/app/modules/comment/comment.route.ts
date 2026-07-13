@@ -13,4 +13,6 @@ router.post(
   CommentController.createComment,
 );
 
+router.get("/:id", checkAuth(), CommentController.getAllCommentByPostId);
+
 export const CommentRoutes = router;

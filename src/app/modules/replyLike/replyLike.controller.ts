@@ -20,5 +20,22 @@ const createReplyLike = catchAsync(
     });
   },
 );
+const getAllReplyLikeByReplyId = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const commentLike = await ReplyLikeServices.getAllReplyLikeByReplyId(
+      id as string,
+    );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successful",
+      data: commentLike,
+    });
+  },
+);
 
-export const ReplyLikeController = { createReplyLike };
+export const ReplyLikeController = {
+  createReplyLike,
+  getAllReplyLikeByReplyId,
+};

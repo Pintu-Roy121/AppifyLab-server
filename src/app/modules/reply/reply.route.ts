@@ -6,4 +6,6 @@ const router = Router();
 
 router.post("/create", checkAuth(), ReplyController.createReply);
 
+router.get("/:id", checkAuth(), ReplyController.getAllCommentsReplyByCommentId);
+
 export const ReplyRoutes = router;

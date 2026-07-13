@@ -20,4 +20,22 @@ const createCommentLike = catchAsync(
   },
 );
 
-export const CommentLikeController = { createCommentLike };
+const getAllCommentsLikeByCommentId = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const commentLike = await CommentLikeServices.getAllCommentsLikeByCommentId(
+      id as string,
+    );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Successful",
+      data: commentLike,
+    });
+  },
+);
+
+export const CommentLikeController = {
+  createCommentLike,
+  getAllCommentsLikeByCommentId,
+};

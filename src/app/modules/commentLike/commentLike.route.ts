@@ -12,5 +12,10 @@ router.post(
   validateRequest(commentLikeCreateZodSchema),
   CommentLikeController.createCommentLike,
 );
+router.get(
+  "/:id",
+  checkAuth(),
+  CommentLikeController.getAllCommentsLikeByCommentId,
+);
 
 export const CommentLikeRoutes = router;

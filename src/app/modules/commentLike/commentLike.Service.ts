@@ -19,7 +19,7 @@ const createCommentLike = async (
     const filter = { user: decodedToken.userId, comment: payload.comment };
     const existing = await CommentLike.findOne(filter).session(session);
 
-    let result: { liked: boolean; likeCount: number };
+    let result: { liked: boolean; commentLike?: object; likeCount: number };
 
     if (existing) {
       await existing.deleteOne({ session });
@@ -32,10 +32,11 @@ const createCommentLike = async (
 
       result = {
         liked: false,
+        commentLike: { _id: existing?._id, delete: true },
         likeCount: Math.max(updated?.likeCount ?? 0, 0),
       };
     } else {
-      await CommentLike.create([filter], { session });
+      const commentLike = await CommentLike.create([filter], { session });
 
       const updated = await Comment.findByIdAndUpdate(
         payload.comment,
@@ -43,10 +44,15 @@ const createCommentLike = async (
         { new: true, session },
       );
 
-      result = { liked: true, likeCount: updated?.likeCount ?? 0 };
+      result = {
+        liked: true,
+        commentLike: commentLike[0],
+        likeCount: updated?.likeCount ?? 0,
+      };
     }
 
     await session.commitTransaction();
+    session.endSession();
     return result;
   } catch (err) {
     await session.abortTransaction();
@@ -56,4 +62,14 @@ const createCommentLike = async (
   }
 };
 
-export const CommentLikeServices = { createCommentLike };
+const getAllCommentsLikeByCommentId = async (payload: string) => {
+  const result = await CommentLike.find({ comment: payload })
+    .sort({ createdAt: -1 })
+    .populate("user", "email");
+  return result;
+};
+
+export const CommentLikeServices = {
+  createCommentLike,
+  getAllCommentsLikeByCommentId,
+};
