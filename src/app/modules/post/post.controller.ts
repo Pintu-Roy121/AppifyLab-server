@@ -28,7 +28,8 @@ const createPost = catchAsync(
 
 const getAllPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const post = await PostServices.getAllPost();
+    const decodedToken = req.user as JwtPayload;
+    const post = await PostServices.getAllPost(decodedToken.userId as string);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

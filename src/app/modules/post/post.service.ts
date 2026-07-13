@@ -17,11 +17,27 @@ const createPost = async (
   return result;
 };
 
-const getAllPost = async () => {
-  const posts = await Post.find({ visibility: PostVisibility.PUBLIC })
+const getAllPost = async (viewerId: string) => {
+  // const posts = await Post.find({ visibility: PostVisibility.PUBLIC })
+  //   .sort({ createdAt: -1 })
+  //   .populate("author", "firstName lastName email");
+  // const total = await Post.countDocuments();
+
+  const filter = viewerId
+    ? {
+        $or: [
+          { visibility: PostVisibility.PUBLIC },
+          { visibility: PostVisibility.PRIVATE, author: viewerId },
+        ],
+      }
+    : { visibility: PostVisibility.PUBLIC };
+
+  const posts = await Post.find(filter)
     .sort({ createdAt: -1 })
     .populate("author", "firstName lastName email");
-  const total = await Post.countDocuments();
+
+  const total = await Post.countDocuments(filter);
+
   return {
     meta: {
       total,
